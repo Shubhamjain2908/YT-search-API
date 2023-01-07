@@ -3,6 +3,7 @@ import cookieSession from "cookie-session";
 import express from "express";
 import { NotFoundError } from "./errors/not-found-error";
 import { errorHandler } from "./middleware/error-handler";
+import { searchVideoRouter } from "./routes/search";
 import { showVideoRouter } from "./routes/videos";
 
 const app = express();
@@ -16,6 +17,7 @@ app.use(
 );
 
 app.use(showVideoRouter);
+app.use(searchVideoRouter);
 
 app.all("*", async () => {
 	throw new NotFoundError();

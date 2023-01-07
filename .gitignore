@@ -1,5 +1,6 @@
 node_modules
 build
-.eslintrc
+.eslintrc*
 .eslintignore
 nodemon.json
+.env

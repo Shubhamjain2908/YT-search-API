@@ -1,5 +1,6 @@
+const dotenv = require("dotenv");
+dotenv.config();
 import mongoose from "mongoose";
-import cron from "node-cron";
 import { searchVideos } from "./api/fetch-yt-api";
 import { app } from "./app";
 
@@ -31,7 +32,8 @@ const start = async () => {
 	});
 
 	// Call the searchVideos function continuously in the background with a 10 second interval
-	cron.schedule("*/10 * * * * *", searchVideos);
+	// cron.schedule("*/10 * * * * *", searchVideos);
+	searchVideos();
 };
 
 start();
