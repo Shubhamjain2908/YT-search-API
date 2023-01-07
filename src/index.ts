@@ -1,4 +1,6 @@
 import mongoose from "mongoose";
+import cron from "node-cron";
+import { searchVideos } from "./api/fetch-yt-api";
 import { app } from "./app";
 
 const start = async () => {
@@ -15,6 +17,7 @@ const start = async () => {
 	}
 
 	try {
+		mongoose.set("strictQuery", false);
 		await mongoose.connect(process.env.MONGO_URI);
 		console.log("Connected to MongoDB!!!");
 	} catch (err) {
@@ -26,6 +29,9 @@ const start = async () => {
 	app.listen(port, () => {
 		console.log(`YT Service: Listening on port ${port}!`);
 	});
+
+	// Call the searchVideos function continuously in the background with a 10 second interval
+	cron.schedule("*/10 * * * * *", searchVideos);
 };
 
 start();

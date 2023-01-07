@@ -1,35 +1,24 @@
 import mongoose from "mongoose";
-
-interface Url {
-	url: string;
-}
-
-interface Thumbnails {
-	default: Url;
-	medium: Url;
-	high: Url;
-}
-
-interface VideoAttrs {
-	title: string;
-	description: string;
-	publishedAt: Date;
-	thumbnails: Thumbnails;
-}
-
+import { VideoSnippet } from "./dto/video-snippet";
 interface VideoDoc extends mongoose.Document {
+	videoId: string;
+	publishedAt: string;
 	title: string;
 	description: string;
-	publishedAt: Date;
-	thumbnails: Thumbnails;
+	thumbnails: object;
 }
 
 interface VideoModel extends mongoose.Model<VideoDoc> {
-	build(attrs: VideoAttrs): VideoDoc;
+	build(attrs: VideoSnippet): VideoDoc;
 }
 
 const videoSchema = new mongoose.Schema(
 	{
+		videoId: {
+			type: String,
+			required: true,
+			unique: true,
+		},
 		title: {
 			type: String,
 			required: true,
@@ -44,13 +33,6 @@ const videoSchema = new mongoose.Schema(
 		},
 		thumbnails: {
 			type: Object,
-			required: true,
-		},
-		createdAt: {
-			type: mongoose.Schema.Types.Date,
-		},
-		updatedAt: {
-			type: mongoose.Schema.Types.Date,
 		},
 	},
 	{
@@ -63,7 +45,7 @@ const videoSchema = new mongoose.Schema(
 	}
 );
 
-videoSchema.statics.build = (attrs: VideoAttrs) => {
+videoSchema.statics.build = (attrs: VideoSnippet) => {
 	return new Video(attrs);
 };
 
