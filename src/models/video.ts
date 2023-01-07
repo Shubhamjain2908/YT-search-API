@@ -2,10 +2,10 @@ import mongoose from "mongoose";
 import { VideoSnippet } from "./dto/video-snippet";
 interface VideoDoc extends mongoose.Document {
 	videoId: string;
-	publishedAt: string;
+	publishedAt: Date;
 	title: string;
 	description: string;
-	thumbnails: object;
+	thumbnails?: object;
 }
 
 interface VideoModel extends mongoose.Model<VideoDoc> {

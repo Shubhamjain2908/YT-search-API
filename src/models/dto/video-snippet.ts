@@ -1,15 +1,15 @@
 interface VideoSnippet {
 	videoId: string;
-	publishedAt: string;
+	publishedAt: Date;
 	title: string;
 	description: string;
-	thumbnails: Thumbnails;
+	thumbnails?: Thumbnails;
 }
 
 interface Thumbnails {
-	default: Default;
-	medium: Default;
-	high: Default;
+	default?: Default;
+	medium?: Default;
+	high?: Default;
 }
 
 interface Default {
