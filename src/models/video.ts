@@ -49,6 +49,9 @@ videoSchema.statics.build = (attrs: VideoSnippet) => {
 	return new Video(attrs);
 };
 
+// creating text index
+videoSchema.index({ title: "text", description: "text" });
+
 const Video = mongoose.model<VideoDoc, VideoModel>("Video", videoSchema);
 
 export { Video, VideoDoc };

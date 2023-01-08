@@ -2,7 +2,7 @@ import axios from "axios";
 import { SearchVideoResult } from "../models/dto/search-video";
 import { VideoDetails } from "../models/dto/video-details";
 import { VideoSnippet } from "../models/dto/video-snippet";
-import { Video } from "../models/video";
+import { Video, VideoDoc } from "../models/video";
 
 const searchQuery = "songs";
 
@@ -73,16 +73,18 @@ const getVideoDetailsAndSaveToDB = async (
 			})
 		);
 
-		saveVideosInDB(videoDetails);
+		// Save the retrieved videos to the database
+		const videoModel = videoDetails
+			.flatMap((v) => v)
+			.map((v) => Video.build(v));
+
+		saveVideosInDB(videoModel);
 	} catch (error: any) {
 		console.error("Error occurred while fetching all videos", error);
 	}
 };
 
-const saveVideosInDB = (videoDetails: Array<Array<VideoSnippet>>) => {
-	// Save the retrieved videos to the database
-	const videoModel = videoDetails.flatMap((v) => v).map((v) => Video.build(v));
-
+const saveVideosInDB = (videoModel: Array<VideoDoc>) => {
 	console.log("Saving video in DB....", videoModel);
 
 	// upserting all records on the bases of videoId
