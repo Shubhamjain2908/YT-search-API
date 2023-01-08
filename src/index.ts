@@ -4,6 +4,7 @@ import mongoose from "mongoose";
 import cron from "node-cron";
 import { searchVideos } from "./api/fetch-yt-api";
 import { app } from "./app";
+
 const start = async () => {
 	console.log("YT service starting...");
 
@@ -12,9 +13,6 @@ const start = async () => {
 	}
 	if (!process.env.MONGO_URI) {
 		throw new Error("MONGO_URI must be defined");
-	}
-	if (!process.env.REDIS_URI) {
-		throw new Error("REDIS_URI must be defined");
 	}
 
 	try {

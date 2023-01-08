@@ -7,19 +7,15 @@ services:
     environment:
       - NODE_ENV=dev
       - PORT=8080
-      - API_KEY=googleAPIKey
+      - API_KEY=someAPIKey,otherAPIKey,oneMoreAPIKey # added support for multiple keys
       - MONGO_URI=mongodb://mongo:27017/app
-      - REDIS_URI=redis://redis:6379
+      - SEARCH_QUERY=songs # search query
+      - USE_MOCK=false
     ports:
       - 8080:8080
     depends_on:
       - mongo
-      - redis
   mongo:
     image: mongo
     ports:
       - 27017:27017
-  redis:
-    image: redis
-    ports:
-      - 6379:6379

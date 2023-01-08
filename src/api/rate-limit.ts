@@ -1,7 +1,6 @@
 import axios from "axios";
 import cron from "node-cron";
 import { ResourceExhaustedError } from "../errors/resource-exhausted-error";
-import { SearchVideoResult } from "../models/dto/search-video";
 
 const API_KEY = process.env.API_KEY?.split(",");
 const API_KEYS_MAP = new Map<string, number>();
@@ -16,23 +15,6 @@ const createKeyMap = () => {
 };
 
 createKeyMap();
-
-const searchVideos2 = async (): Promise<void> => {
-	console.log("Fetching videos....");
-	let items: Array<any>;
-	// if (!"useMockResponseYT") {
-	const data = await callAPI<SearchVideoResult>(
-		"https://www.googleapis.com/youtube/v3/search",
-		{
-			type: "video",
-			order: "date",
-			publishedAfter: new Date(),
-			q: "searchQuery",
-		},
-		new Map(API_KEYS_MAP)
-	);
-	items = data.items;
-};
 
 const callAPI = async <T>(
 	url: string,
@@ -95,4 +77,4 @@ const getMinUsedKeys = (keys: Map<string, number>): [string, number] => {
 // rotate keys after every 24 hours
 cron.schedule("* * 23 * * *", createKeyMap);
 
-export { callAPI, searchVideos2 };
+export { callAPI };
