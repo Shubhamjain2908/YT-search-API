@@ -13,7 +13,7 @@ router.get("/videos", async (req: Request, res: Response) => {
 			limit = parseInt(req.query.limit + "");
 		}
 		const videos = await getVideosCollection(page, limit);
-		res.send(videos);
+		res.json({ videos });
 	} catch (err) {
 		console.log(err);
 		res.status(500).send(err);

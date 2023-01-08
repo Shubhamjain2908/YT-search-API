@@ -3,26 +3,33 @@ import { SearchVideoResult } from "../models/dto/search-video";
 import { VideoDetails } from "../models/dto/video-details";
 import { VideoSnippet } from "../models/dto/video-snippet";
 import { Video, VideoDoc } from "../models/video";
+import { mockSearchResult, mockVideoDetailResult } from "./mock-yt-response";
 
 const searchQuery = "songs";
+const useMockResponseYT = process.env.USE_MOCK || false;
 
 const searchVideos = async (): Promise<void> => {
 	console.log("Fetching videos....");
 	try {
-		const {
-			data: { items },
-		} = await axios.get<SearchVideoResult>(
-			"https://www.googleapis.com/youtube/v3/search",
-			{
-				params: {
-					key: process.env.API_KEY,
-					type: "video",
-					order: "date",
-					publishedAfter: new Date(),
-					q: searchQuery,
-				},
-			}
-		);
+		let items: Array<any>;
+		if (!useMockResponseYT) {
+			const { data } = await axios.get<SearchVideoResult>(
+				"https://www.googleapis.com/youtube/v3/search",
+				{
+					params: {
+						key: process.env.API_KEY,
+						type: "video",
+						order: "date",
+						publishedAfter: new Date(),
+						q: searchQuery,
+					},
+				}
+			);
+			items = data.items;
+		} else {
+			const result = await mockSearchResult();
+			items = result.items;
+		}
 		const videos: Array<string> = items.map((v) => v.id.videoId);
 
 		console.log(videos);
@@ -41,18 +48,23 @@ const getVideoDetailsAndSaveToDB = async (
 		const videoDetails: Array<VideoSnippet[]> = await Promise.all(
 			videoIds.map(async (videoId: string) => {
 				try {
-					const {
-						data: { items },
-					} = await axios.get<VideoDetails>(
-						"https://www.googleapis.com/youtube/v3/videos",
-						{
-							params: {
-								key: process.env.API_KEY,
-								part: "snippet",
-								id: videoId,
-							},
-						}
-					);
+					let items: Array<any>;
+					if (!useMockResponseYT) {
+						const { data } = await axios.get<VideoDetails>(
+							"https://www.googleapis.com/youtube/v3/videos",
+							{
+								params: {
+									key: process.env.API_KEY,
+									part: "snippet",
+									id: videoId,
+								},
+							}
+						);
+						items = data.items;
+					} else {
+						const result = await mockVideoDetailResult(videoId);
+						items = result.items;
+					}
 					return items.map((v) => {
 						const snippet = v.snippet;
 						return {
