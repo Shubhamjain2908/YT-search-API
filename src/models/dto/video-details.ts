@@ -1,11 +1,11 @@
 import { VideoSnippet } from "./video-snippet";
 
 interface VideoDetails {
-	items: Array<Video>;
+	items: Array<VideoSnippetItem>;
 }
 
-interface Video {
+interface VideoSnippetItem {
 	snippet: VideoSnippet;
 }
 
-export { VideoDetails };
+export { VideoDetails, VideoSnippetItem };

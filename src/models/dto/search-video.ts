@@ -10,4 +10,4 @@ interface ID {
 	videoId: string;
 }
 
-export { SearchVideoResult };
+export { SearchVideoResult, Item };
